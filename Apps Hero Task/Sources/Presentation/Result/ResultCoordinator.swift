@@ -1,6 +1,7 @@
 import UIKit
 
 protocol ResultCoordinator: Coordinator {
+    func close()
 }
 
 final class ResultCoordinatorImpl: ResultCoordinator {
@@ -13,9 +14,13 @@ final class ResultCoordinatorImpl: ResultCoordinator {
     }
 
     func start() {
-        let viewModel = ResultViewModelImpl(toDoList: toDoList)
+        let viewModel = ResultViewModelImpl(toDoList: toDoList, coordinator: self)
         let controller = ResultController(viewModel: viewModel)
         
         navigationController.pushViewController(controller, animated: true)
+    }
+    
+    func close() {
+        navigationController.popViewController(animated: true)
     }
 }

@@ -25,6 +25,14 @@ final class ResultController: BaseViewController {
         return tableView
     }()
     
+    private let doneButton: RoundButton = {
+        let button = RoundButton()
+        button.setTitle("Done", for: .normal)
+        button.backgroundColor = .buttonActive
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     init(viewModel: ResultViewModel) {
         self.viewModel = viewModel
         super.init()
@@ -39,6 +47,7 @@ final class ResultController: BaseViewController {
         
         view.addSubview(infoView)
         view.addSubview(tableView)
+        view.addSubview(doneButton)
     }
     
     override func configureView() {
@@ -58,13 +67,22 @@ final class ResultController: BaseViewController {
             
             tableView.topAnchor.constraint(equalTo: infoView.bottomAnchor, constant: 24),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -8),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            doneButton.heightAnchor.constraint(equalToConstant: 45),
+            doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
     }
     
     override func setupObservers() {
         super.setupObservers()
+        
+        doneButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.viewModel.close()
+        }), for: .touchUpInside)
         
         cancellable = viewModel.toDoList
             .sink { [weak self] _ in

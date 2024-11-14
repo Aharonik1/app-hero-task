@@ -22,9 +22,12 @@ protocol ResultViewModel: AnyObject {
     var completedToDoList: [ToDo] { get }
     
     func toggleToDoStatus(at index: IndexPath)
+    func close()
 }
 
 final class ResultViewModelImpl: ResultViewModel {
+    private let coordinator: ResultCoordinator
+    
     let toDoList: CurrentValueSubject<[ToDo], Never>
     var sections: [ResultSection] {
         [
@@ -40,8 +43,9 @@ final class ResultViewModelImpl: ResultViewModel {
         toDoList.value.filter { $0.completed }
     }
     
-    init(toDoList: [ToDo]) {
+    init(toDoList: [ToDo], coordinator: ResultCoordinator) {
         self.toDoList = .init(toDoList)
+        self.coordinator = coordinator
     }
     
     func toggleToDoStatus(at index: IndexPath) {
@@ -56,5 +60,9 @@ final class ResultViewModelImpl: ResultViewModel {
             return
         }
         toDoList.value[index].completed.toggle()
+    }
+    
+    func close() {
+        coordinator.close()
     }
 }
