@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  Apps Hero Task
-//
-//  Created by MacBook on 13/11/24.
-//
-
 import UIKit
 
 @main
